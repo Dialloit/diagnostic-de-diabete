@@ -101,24 +101,6 @@ Ce document détaille toutes les modifications apportées au script `diabetes_an
 
 ---
 
-**2. Résolution de l'Erreur `shap.force_plot`**
-
-*   **Objectif :** Corriger une erreur de type (`TypeError`) lors de l'appel de la fonction `shap.force_plot`.
-*   **Action :**
-    *   **Problème rencontré :** L'utilisateur a signalé une erreur indiquant que `shap.force_plot` n'était pas la fonction correcte ou que ses arguments étaient incorrects. Le message d'erreur suggérait d'utiliser `shap.plots.force`.
-    *   **Correction :** La ligne appelant `shap.force_plot` a été modifiée pour utiliser `shap.plots.force` et les arguments `matplotlib=True` et `show=False` ont été supprimés, car ils n'étaient pas compatibles avec la nouvelle fonction.
-
----
-
-**3. Résolution de l'Erreur `IndexError` avec `prediction_proba`**
-
-*   **Objectif :** Corriger une erreur d'index (`IndexError`) lors de l'accès aux probabilités de prédiction.
-*   **Action :**
-    *   **Problème rencontré :** L'utilisateur a signalé une erreur `IndexError: index 1 is out of bounds for axis 0 with size 1`, suggérant que `prediction_proba` n'avait pas la forme attendue pour un accès `[0][1]`.
-    *   **Correction :** L'accès à `prediction_proba` a été ajusté pour traiter `prediction_proba` comme un tableau 1D représentant la probabilité de la classe positive. Ainsi, `prediction_proba[0][1]` est devenu `prediction_proba[0]` et `prediction_proba[0][0]` est devenu `(1 - prediction_proba[0])`.
-
----
-
 **4. Extension des Champs de Saisie Utilisateur**
 
 *   **Objectif :** Permettre à l'utilisateur de saisir des données pour toutes les colonnes du dataset `diabetes_dataset00.csv` via l'interface Streamlit.
@@ -130,16 +112,6 @@ Ce document détaille toutes les modifications apportées au script `diabetes_an
     *   **Problème rencontré :** Une erreur de remplacement (`replace` tool failed) est survenue lors de l'application de cette modification, nécessitant une relecture du fichier pour un remplacement exact.
 
 ---
-
-**5. Résolution de l'Erreur `ValueError: cannot reindex on an axis with duplicate labels`**
-
-*   **Objectif :** Corriger une erreur de valeur (`ValueError`) survenant après l'extension des champs de saisie.
-*   **Action :**
-    *   **Problème rencontré :** L'utilisateur a signalé une erreur `ValueError: cannot reindex on an axis with duplicate labels`. Cela était dû au fait que les champs `Ethnicity` et `Socioeconomic Factors` étaient des `text_input`, et leurs valeurs de chaîne de caractères, une fois dummifiées par `pd.get_dummies`, pouvaient créer des noms de colonnes en double ou incohérents avec le `model_columns` attendu.
-    *   **Correction :** Les champs `Ethnicity` et `Socioeconomic Factors` ont été convertis en `selectbox` avec des options prédéfinies ("Low Risk"/"High Risk" pour l'ethnicité, et "Low"/"Medium"/"High" pour les facteurs socio-économiques) et leurs entrées sont désormais mappées à des valeurs numériques, garantissant que toutes les données passées à `pd.get_dummies` sont numériques.
-
----
-
 **6. Vérification des Performances du Modèle (Tentative et Annulation)**
 
 *   **Objectif :** Afficher la performance du modèle (précision) sur l'interface utilisateur.
